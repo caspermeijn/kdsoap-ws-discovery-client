@@ -56,6 +56,7 @@ ecm_setup_version(PROJECT
 
 
 add_subdirectory(src)
+add_subdirectory(examples)
 if (BUILD_TESTING)
 #    add_subdirectory(autotests)
 #    add_subdirectory(tests)
