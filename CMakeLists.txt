@@ -52,7 +52,7 @@ ecm_setup_version(PROJECT
     VARIABLE_PREFIX WSDISCOVERY
     VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kdsoap_wsdiscovery_client_version.h"
     PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KDSoapWSDiscoveryClientConfigVersion.cmake"
-    SOVERSION 5)
+)
 
 
 add_subdirectory(src)
@@ -84,7 +84,7 @@ configure_package_config_file(
 )
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdsoap_wsdiscovery_client_version.h
-        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR}/KDSoapWSDiscoveryClient
         COMPONENT Devel)
 
 install(FILES
@@ -98,7 +98,6 @@ install(EXPORT KDSoapWSDiscoveryClientTargets
         FILE KDSoapWSDiscoveryClientTargets.cmake
         NAMESPACE KDSoap::)
 
-install(FILES karchive.categories DESTINATION ${KDE_INSTALL_CONFDIR})
 
 feature_summary(
     WHAT ALL
