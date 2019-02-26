@@ -63,7 +63,6 @@ ecm_generate_headers(KDSoapWSDiscoveryClient_HEADERS
     HEADER_NAMES
     WSDiscoveryClient
     WSDiscoveryProbeJob
-    WSDiscoveryResolveJob
     WSDiscoveryTargetService
 
     REQUIRED_HEADERS KDSoapWSDiscoveryClient_HEADERS

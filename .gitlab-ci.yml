@@ -1,10 +1,17 @@
-ubuntu-1804:
-    image: ubuntu:18.04
+fedora:
+    image: registry.gitlab.com/caspermeijn/docker-images/fedora-build-onvifviewer:latest
     stage: build
     script: 
-        - apt install extra-cmake-modules
-        - cd .. && git checkout https://github.com/caspermeijn/KDSoap.git
-        - cd ../KDSoap &&  mkdir build && cd build
-        - cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local && make && make install
-        - cd ../kdsoap-ws-discovery-client && mkdir build && cd build
-        - cmake .. && make && make install
+        - cd ..
+        - git clone https://github.com/caspermeijn/KDSoap.git
+        - mkdir build-KDSoap
+        - cd build-KDSoap/
+        - cmake ../KDSoap/ -DCMAKE_INSTALL_PREFIX=/usr/local
+        - make
+        - make install
+        - cd ..
+        - mkdir build-kdsoap-ws-discovery-client
+        - cd build-kdsoap-ws-discovery-client
+        - cmake $CI_PROJECT_DIR 
+        - make 
+        - make install
