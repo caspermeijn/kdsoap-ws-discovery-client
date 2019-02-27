@@ -43,7 +43,7 @@ generate_export_header(KDSoapWSDiscoveryClient BASE_NAME WSDiscoveryClient)
 add_library(KDSoap::WSDiscoveryClient ALIAS KDSoapWSDiscoveryClient)
 
 target_include_directories(KDSoapWSDiscoveryClient
-    INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5}/KDSoapWSDiscoveryClient>"
+    INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/KDSoapWSDiscoveryClient>"
 )
 
 target_link_libraries(KDSoapWSDiscoveryClient
@@ -56,14 +56,13 @@ target_link_libraries(KDSoapWSDiscoveryClient
 set_target_properties(KDSoapWSDiscoveryClient PROPERTIES
     VERSION     ${WSDISCOVERY_VERSION_STRING}
     SOVERSION   ${WSDISCOVERY_SOVERSION}
-    EXPORT_NAME "WSDISCOVERY"
+    EXPORT_NAME "WSDiscoveryClient"
 )
 
 ecm_generate_headers(KDSoapWSDiscoveryClient_HEADERS
     HEADER_NAMES
     WSDiscoveryClient
     WSDiscoveryProbeJob
-    WSDiscoveryResolveJob
     WSDiscoveryTargetService
 
     REQUIRED_HEADERS KDSoapWSDiscoveryClient_HEADERS
@@ -74,9 +73,9 @@ install(TARGETS KDSoapWSDiscoveryClient
         ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
-            ${CMAKE_CURRENT_BINARY_DIR}/karchive_export.h
+            ${CMAKE_CURRENT_BINARY_DIR}/wsdiscoveryclient_export.h
             ${KDSoapWSDiscoveryClient_HEADERS}
-        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/KDSoapWSDiscoveryClient
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR}/KDSoapWSDiscoveryClient
         COMPONENT Devel)
 
 if(BUILD_QCH)
@@ -84,7 +83,7 @@ if(BUILD_QCH)
         KDSoapWSDiscoveryClient_QCH
         NAME KDSoapWSDiscoveryClient
         BASE_NAME KDSoapWSDiscoveryClient
-        VERSION ${WSDiscovery_VERSION}
+        VERSION ${WSDISCOVERY_VERSION}
         ORG_DOMAIN net.meijn
         SOURCES # using only public headers, to cover only public API
             ${KDSoapWSDiscoveryClient_HEADERS}
