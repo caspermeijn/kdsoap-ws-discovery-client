@@ -16,8 +16,8 @@
 #include "soapudpclient.h"
 
 //TODO: Remove dependency for KDSoap internals
-#include <../../KDSoap/src/KDSoapClient/KDSoapMessageReader_p.h>
-#include <../../KDSoap/src/KDSoapClient/KDSoapMessageWriter_p.h>
+#include <src/KDSoapClient/KDSoapMessageReader_p.h>
+#include <src/KDSoapClient/KDSoapMessageWriter_p.h>
 #include <QNetworkDatagram>
 #include <QUdpSocket>
 #include "loggingcategory.h"
