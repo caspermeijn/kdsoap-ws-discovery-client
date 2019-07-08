@@ -77,7 +77,7 @@ ecm_generate_headers(KDSoapWSDiscoveryClient_HEADERS
 
 install(TARGETS KDSoapWSDiscoveryClient
         EXPORT KDSoapWSDiscoveryClientTargets
-        ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
+        ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
             ${CMAKE_CURRENT_BINARY_DIR}/wsdiscoveryclient_export.h
