@@ -70,6 +70,7 @@ void WSDiscoveryClient::sendProbe(const QList<KDQName> &typeList, const QList<QU
     message.setNamespaceUri(QStringLiteral("http://schemas.xmlsoap.org/ws/2005/04/discovery"));
 
     KDSoapMessageAddressingProperties addressing;
+    addressing.setAddressingNamespace(KDSoapMessageAddressingProperties::Addressing200408);
     addressing.setAction(QStringLiteral("http://schemas.xmlsoap.org/ws/2005/04/discovery/Probe"));
     addressing.setMessageID(QStringLiteral("urn:uuid:") + QUuid::createUuid().toString(QUuid::WithoutBraces));
     addressing.setDestination(QStringLiteral("urn:schemas-xmlsoap-org:ws:2005:04:discovery"));
@@ -98,6 +99,7 @@ void WSDiscoveryClient::sendResolve(const QString &endpointReferenceString)
     message.setNamespaceUri(QStringLiteral("http://schemas.xmlsoap.org/ws/2005/04/discovery"));
 
     KDSoapMessageAddressingProperties addressing;
+    addressing.setAddressingNamespace(KDSoapMessageAddressingProperties::Addressing200408);
     addressing.setAction(QStringLiteral("http://schemas.xmlsoap.org/ws/2005/04/discovery/Resolve"));
     addressing.setMessageID(QStringLiteral("urn:uuid:") + QUuid::createUuid().toString(QUuid::WithoutBraces));
     addressing.setDestination(QStringLiteral("urn:schemas-xmlsoap-org:ws:2005:04:discovery"));
