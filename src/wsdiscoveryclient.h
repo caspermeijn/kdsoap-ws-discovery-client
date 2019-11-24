@@ -23,7 +23,7 @@
 class KDSoapHeaders;
 class KDSoapMessage;
 class KDQName;
-class SoapUdpClient;
+class KDSoapUdpClient;
 class QHostAddress;
 class WSDiscoveryTargetService;
 
@@ -46,7 +46,7 @@ private slots:
     void receivedMessage(const KDSoapMessage& replyMessage, const KDSoapHeaders& replyHeaders, const QHostAddress& senderAddress, quint16 senderPort);
 
 private:
-    SoapUdpClient * m_soapUdpClient;
+    KDSoapUdpClient * m_soapUdpClient;
     QHash<QString, QSharedPointer<WSDiscoveryTargetService>> m_targetServiceMap;
 };
 

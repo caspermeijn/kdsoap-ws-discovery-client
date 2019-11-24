@@ -25,7 +25,6 @@ set(KSWSDL2CPP_OPTION -namespace WSDiscovery200504 ${GLOBAL_KSWSDL2CPP_OPTION})
 KDSOAP_GENERATE_WSDL(KDSoapWSDiscoveryClient_WSDL ${KDWSDL_IMPORT_PATH}/schemas.xmlsoap.org/ws/2005/04/discovery/ws-discovery.wsdl)
 
 set(KDSoapWSDiscoveryClient_SRCS
-    "soapudpclient.cpp"
     "wsdiscoveryclient.cpp"
     "wsdiscoveryprobejob.cpp"
     "wsdiscoverytargetservice.cpp"
@@ -41,13 +40,6 @@ ecm_qt_declare_logging_category(KDSoapWSDiscoveryClient_SRCS
 add_library(KDSoapWSDiscoveryClient ${KDSoapWSDiscoveryClient_SRCS} ${KDSoapWSDiscoveryClient_WSDL})
 generate_export_header(KDSoapWSDiscoveryClient BASE_NAME WSDiscoveryClient)
 add_library(KDSoap::WSDiscoveryClient ALIAS KDSoapWSDiscoveryClient)
-
-get_filename_component(DEFAULT_KDSOAP_PATH ../../KDSoap/ ABSOLUTE)
-set(KDSOAP_PATH ${DEFAULT_KDSOAP_PATH} CACHE PATH "Path to the KDSoap sources")
-if(NOT EXISTS ${KDSOAP_PATH}/src/KDSoapClient/KDSoapMessageReader_p.h)
-  message(FATAL_ERROR "KDSoap sources not found, tried ${KDSOAP_PATH}.")
-endif()
-target_include_directories(KDSoapWSDiscoveryClient PRIVATE "${KDSOAP_PATH}")
 
 target_include_directories(KDSoapWSDiscoveryClient
     INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/KDSoapWSDiscoveryClient>"

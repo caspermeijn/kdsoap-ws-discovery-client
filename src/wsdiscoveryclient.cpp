@@ -16,11 +16,11 @@
 #include "wsdiscoveryclient.h"
 
 #include "loggingcategory.h"
-#include "soapudpclient.h"
 #include "wsdiscoverytargetservice.h"
 
 #include <KDSoapClient/KDSoapMessage>
 #include <KDSoapClient/KDSoapMessageAddressingProperties>
+#include <KDSoapClient/KDSoapUdpClient>
 #include <QHostAddress>
 #include <QTimer>
 #include <QUrl>
@@ -36,15 +36,15 @@ static const QHostAddress DISCOVERY_ADDRESS_IPV6 = QHostAddress(QStringLiteral("
 WSDiscoveryClient::WSDiscoveryClient(QObject *parent) :
     QObject(parent)
 {
-    m_soapUdpClient = new SoapUdpClient(this);
-    connect(m_soapUdpClient, &SoapUdpClient::receivedMessage, this, &WSDiscoveryClient::receivedMessage);
+    m_soapUdpClient = new KDSoapUdpClient(this);
+    connect(m_soapUdpClient, &KDSoapUdpClient::receivedMessage, this, &WSDiscoveryClient::receivedMessage);
 }
 
 WSDiscoveryClient::~WSDiscoveryClient() = default;
 
 void WSDiscoveryClient::start()
 {
-    bool rc = m_soapUdpClient->bind(DISCOVERY_PORT, DISCOVERY_ADDRESS_IPV4, DISCOVERY_ADDRESS_IPV6);
+    bool rc = m_soapUdpClient->bind(DISCOVERY_PORT, QAbstractSocket::ShareAddress);
     Q_ASSERT(rc);
 }
 
@@ -139,7 +139,7 @@ void WSDiscoveryClient::receivedMessage(const KDSoapMessage &replyMessage, const
             emit probeMatchReceived(service);
         }
     } else {
-        qCDebug(KDSoapWSDiscoveryClient) << "Recieved message with unknown action:" << replyMessage.messageAddressingProperties().action();
+        qCDebug(KDSoapWSDiscoveryClient) << "Received message with unknown action:" << replyMessage.messageAddressingProperties().action();
     }
 }
 
