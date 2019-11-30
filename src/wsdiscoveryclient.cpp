@@ -121,6 +121,22 @@ void WSDiscoveryClient::receivedMessage(const KDSoapMessage &replyMessage, const
         // NO-OP
     } else if(replyMessage.messageAddressingProperties().action() == QStringLiteral("http://schemas.xmlsoap.org/ws/2005/04/discovery/Resolve")) {
         // NO-OP
+    } else if(replyMessage.messageAddressingProperties().action() == QStringLiteral("http://schemas.xmlsoap.org/ws/2005/04/discovery/ResolveMatches")) {
+        WSDiscovery200504::TNS__ResolveMatchesType resolveMatches;
+        resolveMatches.deserialize(replyMessage);
+
+        auto resolveMatch = resolveMatches.resolveMatch();
+        const QString& endpointReference = resolveMatch.endpointReference().address();
+        QSharedPointer<WSDiscoveryTargetService> service = m_targetServiceMap.value(endpointReference);
+        if(service.isNull()) {
+            service = QSharedPointer<WSDiscoveryTargetService>::create(endpointReference);
+            m_targetServiceMap.insert(endpointReference, service);
+        }
+        service->setTypeList(resolveMatch.types().entries());
+        service->setScopeList(QUrl::fromStringList(resolveMatch.scopes().value().entries()));
+        service->setXAddrList(QUrl::fromStringList(resolveMatch.xAddrs().entries()));
+        service->updateLastSeen();
+        emit resolveMatchReceived(service);
     } else if(replyMessage.messageAddressingProperties().action() == QStringLiteral("http://schemas.xmlsoap.org/ws/2005/04/discovery/ProbeMatches")) {
         WSDiscovery200504::TNS__ProbeMatchesType probeMatches;
         probeMatches.deserialize(replyMessage);

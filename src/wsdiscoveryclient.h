@@ -36,6 +36,7 @@ public:
 
 signals:
     void probeMatchReceived(const QSharedPointer<WSDiscoveryTargetService>& probeMatchService);
+    void resolveMatchReceived(const QSharedPointer<WSDiscoveryTargetService>& probeMatchService);
 
 public slots:
     void start();
