@@ -35,7 +35,7 @@ void WSDiscoveryTargetService::updateLastSeen()
     setLastSeen(QDateTime::currentDateTime());
 }
 
-bool WSDiscoveryTargetService::isMatchingType(const KDQName &matchingType)
+bool WSDiscoveryTargetService::isMatchingType(const KDQName &matchingType) const
 {
     for(const KDQName &type : m_typeList) {
         if(matchingType.nameSpace() == type.nameSpace() &&
@@ -45,7 +45,7 @@ bool WSDiscoveryTargetService::isMatchingType(const KDQName &matchingType)
     return false;
 }
 
-bool WSDiscoveryTargetService::isMatchingScope(const QUrl &matchingScope)
+bool WSDiscoveryTargetService::isMatchingScope(const QUrl &matchingScope) const
 {
     for(const QUrl &scope : m_scopeList) {
         if(matchingScope == scope)

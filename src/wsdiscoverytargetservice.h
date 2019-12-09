@@ -37,8 +37,8 @@ public:
     void setLastSeen(const QDateTime &lastSeen);
     void updateLastSeen();
 
-    bool isMatchingType(const KDQName &matchingType);
-    bool isMatchingScope(const QUrl &matchingScope);
+    bool isMatchingType(const KDQName &matchingType) const;
+    bool isMatchingScope(const QUrl &matchingScope) const;
 
 private:
     QString m_endpointReference;
