@@ -1,4 +1,4 @@
-# KDSoap WS-Discovery client
+# KDSoap WS-Discovery client                {#mainpage}
 
 This project is trying to create a WS-Discovery client library based on the KDSoap
 library. It uses modern C++ 11 and Qt 5. The initial development is done for
