@@ -1,4 +1,4 @@
-# KDSoap WS-Discovery client
+# KDSoap WS-Discovery client                {#mainpage}
 
 This project is trying to create a WS-Discovery client library based on the KDSoap
 library. It uses modern C++ 11 and Qt 5. The initial development is done for
@@ -7,15 +7,13 @@ However the library is designed to be useful as a generic WS-Discovery client.
 
 ## Current state
 
-The library is not yet ready for production. It needs patches to KDSoap, most are
-applied to [this tree](https://github.com/caspermeijn/KDSoap). It also needs some
-internal KDSoap headers.
+The library is not yet ready for production. There are some API changes planned and it needs the master branch of [KDSoap](https://github.com/KDAB/KDSoap).
 
 ## Contributions
 
 Contributions to the project are appreciated. See the
 [issue tracker](https://gitlab.com/caspermeijn/kdsoap-ws-discovery-client/issues)
-to open tasks and feel free to open a merge request for the changes you made.
+for open tasks and feel free to open a merge request for the changes you made.
 
 Compatibility testing with devices you own is also useful. These could be ONVIF
 cameras, printers or other WS-Discovery devices. Open an issue in the
@@ -41,11 +39,13 @@ ProbeMatch received:
 
 ## Building
 
-To build this project you need a copy of KDSoap and have extra-cmake-modules installed.
+To build this project you need to have extra-cmake-modules and the master branch of KDSoap installed.
 
 ```
 $ sudo apt install extra-cmake-modules
-$ git checkout https://github.com/caspermeijn/KDSoap.git
+$ git checkout https://github.com/KDAB/KDSoap.git
+$ cd KDSoap && mkdir build && cd build
+$ cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local && make && make install
 $ git checkout https://gitlab.com/caspermeijn/kdsoap-ws-discovery-client.git
 $ cd kdsoap-ws-discovery-client && mkdir build && cd build
 $ cmake .. && make && make install
