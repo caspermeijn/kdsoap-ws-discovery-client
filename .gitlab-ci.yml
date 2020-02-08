@@ -17,6 +17,7 @@ fedora:
         - cmake $CI_PROJECT_DIR 
         - make 
         - make install
+        - ctest --verbose
         
 pages:
     script:

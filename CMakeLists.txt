@@ -23,6 +23,7 @@ set_package_properties(ECM PROPERTIES TYPE REQUIRED DESCRIPTION "Extra CMake Mod
 feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
+include(CTest)
 include(KDEInstallDirs)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 include(KDECMakeSettings)
@@ -30,7 +31,7 @@ include(KDECMakeSettings)
 include(GenerateExportHeader)
 
 set(REQUIRED_QT_VERSION 5.9.0)
-find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Core Network Xml)
+find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Core Network Test Xml)
 
 find_package(KDSoap 1.8.50 REQUIRED)
 set_package_properties(KDSoap PROPERTIES
@@ -58,9 +59,8 @@ ecm_setup_version(PROJECT
 add_subdirectory(src)
 add_subdirectory(examples)
 add_subdirectory(docs)  
-if (BUILD_TESTING)
-#    add_subdirectory(autotests)
-#    add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(autotests)
 endif()
 
 # create a Config.cmake and a ConfigVersion.cmake file and install them
