@@ -1,3 +1,9 @@
+<!--
+Copyright (C) 2019-2020 Casper Meijn <casper@meijn.net>
+
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
 # KDSoap WS-Discovery client                {#mainpage}
 
 This project is trying to create a WS-Discovery client library based on the KDSoap
