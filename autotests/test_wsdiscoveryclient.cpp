@@ -1,9 +1,13 @@
 #include <KDSoapClient/KDQName>
 #include <QNetworkDatagram>
+#include <QSignalSpy>
 #include <QTest>
 #include <QUdpSocket>
 #include <QXmlStreamReader>
 #include "wsdiscoveryclient.h"
+#include "wsdiscoverytargetservice.h"
+
+Q_DECLARE_METATYPE(QSharedPointer<WSDiscoveryTargetService>)
 
 class testWSDiscoveryClient: public QObject
 {
@@ -11,11 +15,15 @@ class testWSDiscoveryClient: public QObject
 private slots:
     void testSendProbe();
     void testSendResolve();
+    void testReceiveProbeMatch();
+    void testReceiveResolveMatch();
     
 private:
     QByteArray zeroOutUuid(const QByteArray& original);
     QByteArray expectedSendProbeData();
     QByteArray expectedSendResolveData();
+    QByteArray toBeSendProbeMatchData();
+    QByteArray toBeSendResolveMatchData();
     QByteArray formatXml(const QByteArray& original);
 };
 
@@ -107,6 +115,133 @@ QByteArray testWSDiscoveryClient::expectedSendResolveData() {
         "  </soap:Body>"
         "</soap:Envelope>");
 }
+
+void testWSDiscoveryClient::testReceiveProbeMatch() 
+{
+    WSDiscoveryClient discoveryClient;
+    discoveryClient.start();
+    
+    qRegisterMetaType<QSharedPointer<WSDiscoveryTargetService> >();
+    QSignalSpy spy(&discoveryClient, &WSDiscoveryClient::probeMatchReceived);
+    QVERIFY(spy.isValid());
+    
+    QUdpSocket testSocket;
+    QVERIFY(testSocket.bind(QHostAddress::Any, 3702, QAbstractSocket::ShareAddress));
+    QVERIFY(testSocket.joinMulticastGroup(QHostAddress("FF02::C")));
+    testSocket.writeDatagram(toBeSendProbeMatchData(), QHostAddress("FF02::C"), 3702);
+    
+    QVERIFY(spy.wait(1000));
+    
+    QCOMPARE(spy.count(), 1); // make sure the signal was emitted exactly one time
+    QList<QVariant> arguments = spy.takeFirst(); // take the first signal
+    
+    const QSharedPointer<WSDiscoveryTargetService>& probeMatchService = qvariant_cast<QSharedPointer<WSDiscoveryTargetService> >(arguments.at(0));
+
+    QCOMPARE(probeMatchService->endpointReference(), "Incomming_unique_reference");
+    QCOMPARE(probeMatchService->scopeList().size(), 1);
+    QCOMPARE(probeMatchService->scopeList().at(0), QUrl("ldap:///ou=engineering,o=examplecom,c=us"));
+    QCOMPARE(probeMatchService->typeList().size(), 1);
+    QCOMPARE(probeMatchService->typeList().at(0), KDQName("http://printer.example.org/2003/imaging", "PrintBasic"));
+    QCOMPARE(probeMatchService->xAddrList().size(), 1);
+    QCOMPARE(probeMatchService->xAddrList().at(0), QUrl("http://prn-example/PRN42/b42-1668-a"));
+    QVERIFY(probeMatchService->lastSeen().msecsTo(QDateTime::currentDateTime()) < 500);
+}
+
+QByteArray testWSDiscoveryClient::toBeSendProbeMatchData()
+{
+    return QByteArray(
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        "<soap:Envelope"
+        "  xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\""
+        "  xmlns:soap-enc=\"http://www.w3.org/2003/05/soap-encoding\""
+        "  xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\""
+        "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""
+        "  xmlns:wsa=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\""
+        "  xmlns:n1=\"http://schemas.xmlsoap.org/ws/2005/04/discovery\">"
+        "  <soap:Header>"
+        "    <wsa:To>urn:schemas-xmlsoap-org:ws:2005:04:discovery</wsa:To>"
+        "    <wsa:Action>http://schemas.xmlsoap.org/ws/2005/04/discovery/ProbeMatches</wsa:Action>"
+        "    <wsa:MessageID>urn:uuid:00000000-0000-0000-0000-000000000000</wsa:MessageID>"
+        "    <wsa:RelatesTo>xs:anyURI</wsa:RelatesTo>"
+        "    <n1:AppSequence InstanceId=\"12\" MessageNumber=\"12\"/>"
+        "  </soap:Header>"
+        "  <soap:Body>"
+        "    <n1:ProbeMatches>"
+        "      <n1:ProbeMatch>"
+        "        <wsa:EndpointReference><wsa:Address>Incomming_unique_reference</wsa:Address></wsa:EndpointReference>"
+        "        <n1:Types xmlns:i=\"http://printer.example.org/2003/imaging\">i:PrintBasic</n1:Types>"
+        "        <n1:Scopes>ldap:///ou=engineering,o=examplecom,c=us</n1:Scopes>"
+        "        <n1:XAddrs>http://prn-example/PRN42/b42-1668-a</n1:XAddrs>"
+        "        <n1:MetadataVersion>12</n1:MetadataVersion>"
+        "      </n1:ProbeMatch>"
+        "    </n1:ProbeMatches>"
+        "  </soap:Body>"
+        "</soap:Envelope>");
+}
+
+void testWSDiscoveryClient::testReceiveResolveMatch() 
+{
+    WSDiscoveryClient discoveryClient;
+    discoveryClient.start();
+    
+    qRegisterMetaType<QSharedPointer<WSDiscoveryTargetService> >();
+    QSignalSpy spy(&discoveryClient, &WSDiscoveryClient::resolveMatchReceived);
+    QVERIFY(spy.isValid());
+    
+    QUdpSocket testSocket;
+    QVERIFY(testSocket.bind(QHostAddress::Any, 3702, QAbstractSocket::ShareAddress));
+    QVERIFY(testSocket.joinMulticastGroup(QHostAddress("FF02::C")));
+    testSocket.writeDatagram(toBeSendResolveMatchData(), QHostAddress("FF02::C"), 3702);
+    
+    QVERIFY(spy.wait(1000));
+    
+    QCOMPARE(spy.count(), 1); // make sure the signal was emitted exactly one time
+    QList<QVariant> arguments = spy.takeFirst(); // take the first signal
+    
+    const QSharedPointer<WSDiscoveryTargetService>& probeMatchService = qvariant_cast<QSharedPointer<WSDiscoveryTargetService> >(arguments.at(0));
+
+    QCOMPARE(probeMatchService->endpointReference(), "Incomming_resolve_reference");
+    QCOMPARE(probeMatchService->scopeList().size(), 1);
+    QCOMPARE(probeMatchService->scopeList().at(0), QUrl("ldap:///ou=floor1,ou=b42,ou=anytown,o=examplecom,c=us"));
+    QCOMPARE(probeMatchService->typeList().size(), 1);
+    QCOMPARE(probeMatchService->typeList().at(0), KDQName("http://printer.example.org/2003/imaging", "PrintAdvanced"));
+    QCOMPARE(probeMatchService->xAddrList().size(), 1);
+    QCOMPARE(probeMatchService->xAddrList().at(0), QUrl("http://printer.local:8080"));
+    QVERIFY(probeMatchService->lastSeen().msecsTo(QDateTime::currentDateTime()) < 500);
+}
+
+QByteArray testWSDiscoveryClient::toBeSendResolveMatchData()
+{
+    return QByteArray(
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        "<soap:Envelope"
+        "  xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\""
+        "  xmlns:soap-enc=\"http://www.w3.org/2003/05/soap-encoding\""
+        "  xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\""
+        "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""
+        "  xmlns:wsa=\"http://schemas.xmlsoap.org/ws/2004/08/addressing\""
+        "  xmlns:n1=\"http://schemas.xmlsoap.org/ws/2005/04/discovery\">"
+        "  <soap:Header>"
+        "    <wsa:To>urn:schemas-xmlsoap-org:ws:2005:04:discovery</wsa:To>"
+        "    <wsa:Action>http://schemas.xmlsoap.org/ws/2005/04/discovery/ResolveMatches</wsa:Action>"
+        "    <wsa:MessageID>urn:uuid:00000000-0000-0000-0000-000000000000</wsa:MessageID>"
+        "    <wsa:RelatesTo>xs:anyURI</wsa:RelatesTo>"
+        "    <n1:AppSequence InstanceId=\"12\" MessageNumber=\"13\"/>"
+        "  </soap:Header>"
+        "  <soap:Body>"
+        "    <n1:ResolveMatches>"
+        "      <n1:ResolveMatch>"
+        "        <wsa:EndpointReference><wsa:Address>Incomming_resolve_reference</wsa:Address></wsa:EndpointReference>"
+        "        <n1:Types xmlns:i=\"http://printer.example.org/2003/imaging\">i:PrintAdvanced</n1:Types>"
+        "        <n1:Scopes>ldap:///ou=floor1,ou=b42,ou=anytown,o=examplecom,c=us</n1:Scopes>"
+        "        <n1:XAddrs>http://printer.local:8080</n1:XAddrs>"
+        "        <n1:MetadataVersion>12</n1:MetadataVersion>"
+        "      </n1:ResolveMatch>"
+        "    </n1:ResolveMatches>"
+        "  </soap:Body>"
+        "</soap:Envelope>");
+}
+
 
 QByteArray testWSDiscoveryClient::formatXml(const QByteArray& original)
 {
