@@ -142,7 +142,8 @@ void WSDiscoveryClient::receivedMessage(const KDSoapMessage &replyMessage, const
         WSDiscovery200504::TNS__ProbeMatchesType probeMatches;
         probeMatches.deserialize(replyMessage);
 
-        for(const WSDiscovery200504::TNS__ProbeMatchType& probeMatch : probeMatches.probeMatch()) {
+        const QList<WSDiscovery200504::TNS__ProbeMatchType>& probeMatchList = probeMatches.probeMatch();
+        for(const WSDiscovery200504::TNS__ProbeMatchType& probeMatch : probeMatchList) {
             const QString& endpointReference = probeMatch.endpointReference().address();
             QSharedPointer<WSDiscoveryTargetService> service = m_targetServiceMap.value(endpointReference);
             if(service.isNull()) {

@@ -45,13 +45,16 @@ void OnvifDiscover::matchReceived(const QSharedPointer<WSDiscoveryTargetService>
 {
     qDebug() << "ProbeMatch received:";
     qDebug() << "  Endpoint reference:" << matchedService->endpointReference();
-    for(auto type : matchedService->typeList()) {
+    const auto& typeList = matchedService->typeList();
+    for(const auto& type : typeList) {
         qDebug() << "  Type:"  << type.localName() << "in namespace" << type.nameSpace();
     }
-    for(auto scope : matchedService->scopeList()) {
+    const auto& scopeList = matchedService->scopeList();
+    for(const auto& scope : scopeList) {
         qDebug() << "  Scope:"  << scope.toString();
     }
-    for(auto xAddr : matchedService->xAddrList()) {
+    const auto& xAddrList = matchedService->xAddrList();
+    for(const auto& xAddr : xAddrList) {
         qDebug() << "  XAddr:" << xAddr.toString();
     }
 }
