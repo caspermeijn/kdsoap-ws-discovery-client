@@ -40,8 +40,9 @@ bool WSDiscoveryTargetService::isMatchingType(const KDQName &matchingType) const
 {
     for(const KDQName &type : m_typeList) {
         if(matchingType.nameSpace() == type.nameSpace() &&
-                matchingType.localName() == type.localName())
+                matchingType.localName() == type.localName()) {
             return true;
+        }
     }
     return false;
 }
@@ -49,8 +50,9 @@ bool WSDiscoveryTargetService::isMatchingType(const KDQName &matchingType) const
 bool WSDiscoveryTargetService::isMatchingScope(const QUrl &matchingScope) const
 {
     for(const QUrl &scope : m_scopeList) {
-        if(matchingScope == scope)
+        if(matchingScope == scope) {
             return true;
+        }
     }
     return false;
 }

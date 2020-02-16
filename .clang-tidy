@@ -13,7 +13,6 @@ WarningsAsErrors: |
   -hicpp-special-member-functions,
   -readability-magic-numbers,
   -modernize-pass-by-value,
-  -hicpp-braces-around-statements,
   -bugprone-branch-clone,
   -readability-convert-member-functions-to-static,
 HeaderFilterRegex: '**/*.h'
