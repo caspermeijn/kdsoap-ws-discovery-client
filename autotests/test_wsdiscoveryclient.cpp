@@ -29,6 +29,10 @@ Q_DECLARE_METATYPE(QSharedPointer<WSDiscoveryTargetService>)
 class testWSDiscoveryClient: public QObject
 {
     Q_OBJECT
+public:
+    testWSDiscoveryClient(QObject* parent = nullptr) :
+        QObject(parent) {;}
+        
 private slots:
     void testSendProbe();
     void testSendResolve();
