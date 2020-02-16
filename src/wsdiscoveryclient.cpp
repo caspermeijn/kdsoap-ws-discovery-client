@@ -31,8 +31,8 @@
 #include "wsdl_ws-discovery.h"
 
 static const int DISCOVERY_PORT = 3702;
-static const QHostAddress DISCOVERY_ADDRESS_IPV4 = QHostAddress(QStringLiteral("239.255.255.250"));
-static const QHostAddress DISCOVERY_ADDRESS_IPV6 = QHostAddress(QStringLiteral("FF02::C"));
+#define DISCOVERY_ADDRESS_IPV4 (QHostAddress(QStringLiteral("239.255.255.250")))
+#define DISCOVERY_ADDRESS_IPV6 (QHostAddress(QStringLiteral("FF02::C")))
 
 WSDiscoveryClient::WSDiscoveryClient(QObject *parent) :
     QObject(parent)
