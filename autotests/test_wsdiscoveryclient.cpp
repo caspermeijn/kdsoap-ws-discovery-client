@@ -34,18 +34,18 @@ public:
         QObject(parent) {;}
         
 private slots:
-    void testSendProbe();
-    void testSendResolve();
-    void testReceiveProbeMatch();
-    void testReceiveResolveMatch();
+    static void testSendProbe();
+    static void testSendResolve();
+    static void testReceiveProbeMatch();
+    static void testReceiveResolveMatch();
     
 private:
-    QByteArray zeroOutUuid(const QByteArray& original);
-    QByteArray expectedSendProbeData();
-    QByteArray expectedSendResolveData();
-    QByteArray toBeSendProbeMatchData();
-    QByteArray toBeSendResolveMatchData();
-    QByteArray formatXml(const QByteArray& original);
+    static QByteArray zeroOutUuid(const QByteArray& original);
+    static QByteArray expectedSendProbeData();
+    static QByteArray expectedSendResolveData();
+    static QByteArray toBeSendProbeMatchData();
+    static QByteArray toBeSendResolveMatchData();
+    static QByteArray formatXml(const QByteArray& original);
 };
 
 void testWSDiscoveryClient::testSendProbe() 

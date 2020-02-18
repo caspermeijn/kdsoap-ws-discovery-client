@@ -14,7 +14,6 @@ WarningsAsErrors: |
   -readability-magic-numbers,
   -modernize-pass-by-value,
   -bugprone-branch-clone,
-  -readability-convert-member-functions-to-static,
 HeaderFilterRegex: '**/*.h'
 AnalyzeTemporaryDtors: false
 FormatStyle:     none
