@@ -30,7 +30,7 @@ class testWSDiscoveryClient: public QObject
 {
     Q_OBJECT
 public:
-    testWSDiscoveryClient(QObject* parent = nullptr) :
+    explicit testWSDiscoveryClient(QObject* parent = nullptr) :
         QObject(parent) {;}
         
 private slots:
