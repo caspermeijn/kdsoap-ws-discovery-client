@@ -46,7 +46,9 @@ WSDiscoveryClient::~WSDiscoveryClient() = default;
 void WSDiscoveryClient::start()
 {
     bool rc = m_soapUdpClient->bind(DISCOVERY_PORT, QAbstractSocket::ShareAddress);
-    Q_ASSERT(rc);
+    if (!rc) {
+        qWarning() << "start()->KDSoapUdpClient::bind() returned false when binding to port" << DISCOVERY_PORT;
+    }
 }
 
 void WSDiscoveryClient::sendProbe(const QList<KDQName> &typeList, const QList<QUrl> &scopeList)
@@ -79,9 +81,13 @@ void WSDiscoveryClient::sendProbe(const QList<KDQName> &typeList, const QList<QU
     message.setMessageAddressingProperties(addressing);
 
     auto rc = m_soapUdpClient->sendMessage(message, KDSoapHeaders(), DISCOVERY_ADDRESS_IPV4, DISCOVERY_PORT);
-    Q_ASSERT(rc);
+    if (!rc) {
+        qWarning() << "sendProbe()->KDSoapUdpClient::sendMessage() returned false for" << DISCOVERY_ADDRESS_IPV4 << "on port" << DISCOVERY_PORT;
+    }
     rc = m_soapUdpClient->sendMessage(message, KDSoapHeaders(), DISCOVERY_ADDRESS_IPV6, DISCOVERY_PORT);
-    Q_ASSERT(rc);
+    if (!rc) {
+        qWarning() << "sendProbe()->KDSoapUdpClient::sendMessage() returned false for" << DISCOVERY_ADDRESS_IPV6 << "on port" << DISCOVERY_PORT;
+    }
 }
 
 void WSDiscoveryClient::sendResolve(const QString &endpointReferenceString)
@@ -108,9 +114,13 @@ void WSDiscoveryClient::sendResolve(const QString &endpointReferenceString)
     message.setMessageAddressingProperties(addressing);
 
     auto rc = m_soapUdpClient->sendMessage(message, KDSoapHeaders(), DISCOVERY_ADDRESS_IPV4, DISCOVERY_PORT);
-    Q_ASSERT(rc);
+    if (!rc) {
+        qWarning() << "sendResolve()->KDSoapUdpClient::sendMessage() returned false for" << DISCOVERY_ADDRESS_IPV4 << "on port" << DISCOVERY_PORT;
+    }
     rc = m_soapUdpClient->sendMessage(message, KDSoapHeaders(), DISCOVERY_ADDRESS_IPV6, DISCOVERY_PORT);
-    Q_ASSERT(rc);
+    if (!rc) {
+        qWarning() << "sendResolve()->KDSoapUdpClient::sendMessage() returned false for" << DISCOVERY_ADDRESS_IPV6 << "on port" << DISCOVERY_PORT;
+    }
 }
 
 void WSDiscoveryClient::receivedMessage(const KDSoapMessage &replyMessage, const KDSoapHeaders &replyHeaders, const QHostAddress &senderAddress, quint16 senderPort)
