@@ -24,12 +24,14 @@ fedora:
         
 fedora-clang:
     stage: build
-    image: registry.fedoraproject.org/fedora-minimal:33
+    image: fedora:31
     variables:
         CC: clang
         CXX: clang++
     before_script:
-        - microdnf install git cmake ninja-build clang clang-tools-extra clazy extra-cmake-modules qt5-qtbase-devel kf5-kcoreaddons-devel kdsoap-devel && microdnf clean all
+        - dnf install -y 'dnf-command(copr)'
+        - dnf copr -y enable caspermeijn/kdsoap
+        - dnf install -y git cmake ninja-build clang clang-tools-extra clazy extra-cmake-modules qt5-qtbase-devel kf5-kcoreaddons-devel kdsoap-devel
         - cd ..
         - mkdir build
         - cd build

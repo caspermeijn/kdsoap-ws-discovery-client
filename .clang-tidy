@@ -13,8 +13,13 @@ WarningsAsErrors: |
   *,
   -hicpp-special-member-functions,
   -readability-magic-numbers,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -cppcoreguidelines-owning-memory,
+  -cppcoreguidelines-pro-type-reinterpret-cast,
   -modernize-pass-by-value,
   -bugprone-branch-clone,
+  -cppcoreguidelines-macro-usage,
+  -readability-convert-member-functions-to-static,
 HeaderFilterRegex: '**/*.h'
 AnalyzeTemporaryDtors: false
 FormatStyle:     none
