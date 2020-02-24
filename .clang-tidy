@@ -6,8 +6,9 @@ Checks: |
   -modernize-use-trailing-return-type,
   bugprone-*,
   readability-*,
+  -readability-redundant-access-specifiers,
   hicpp-*,
-  cppcoreguidelines-*',
+  cppcoreguidelines-*
 WarningsAsErrors: |
   *,
   -hicpp-special-member-functions,
