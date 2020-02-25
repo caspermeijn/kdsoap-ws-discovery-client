@@ -8,6 +8,7 @@ fedora:
     before_script:
         - cd ..
         - git clone https://github.com/KDAB/KDSoap.git
+        - cd KDSoap && git checkout kdsoap-1.9 && cd ..
         - mkdir build-KDSoap
         - cd build-KDSoap/
         - cmake ../KDSoap/ -DCMAKE_INSTALL_PREFIX=/usr/local
@@ -46,6 +47,7 @@ pages:
     before_script:
         - cd ..
         - git clone https://github.com/KDAB/KDSoap.git
+        - cd KDSoap && git checkout kdsoap-1.9 && cd ..
         - mkdir build-KDSoap
         - cd build-KDSoap/
         - cmake ../KDSoap/ -DCMAKE_INSTALL_PREFIX=/usr/local
