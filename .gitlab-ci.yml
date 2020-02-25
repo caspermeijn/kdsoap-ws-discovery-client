@@ -22,6 +22,25 @@ fedora:
         - make install
         - ctest --verbose
         
+fedora-clang:
+    stage: build
+    image: fedora:31
+    variables:
+        CC: clang
+        CXX: clang++
+    before_script:
+        - dnf install -y 'dnf-command(copr)'
+        - dnf copr -y enable caspermeijn/kdsoap
+        - dnf install -y git cmake ninja-build clang clang-tools-extra clazy extra-cmake-modules qt5-qtbase-devel kf5-kcoreaddons-devel kdsoap-devel
+        - cd ..
+        - mkdir build
+        - cd build
+    script: 
+        - cmake -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON $CI_PROJECT_DIR 
+        - ninja 
+        - cd $CI_PROJECT_DIR && clang-tidy -p ../build/compile_commands.json **/*.cpp
+        - cd $CI_PROJECT_DIR && clazy-standalone -p ../build/compile_commands.json -checks=level0,level1,level2 **/*.cpp
+        
 pages:
     image: registry.gitlab.com/caspermeijn/docker-images/fedora-build-onvifviewer:latest
     before_script:

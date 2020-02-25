@@ -31,8 +31,8 @@
 #include "wsdl_ws-discovery.h"
 
 static const int DISCOVERY_PORT = 3702;
-static const QHostAddress DISCOVERY_ADDRESS_IPV4 = QHostAddress(QStringLiteral("239.255.255.250"));
-static const QHostAddress DISCOVERY_ADDRESS_IPV6 = QHostAddress(QStringLiteral("FF02::C"));
+#define DISCOVERY_ADDRESS_IPV4 (QHostAddress(QStringLiteral("239.255.255.250")))
+#define DISCOVERY_ADDRESS_IPV6 (QHostAddress(QStringLiteral("FF02::C")))
 
 WSDiscoveryClient::WSDiscoveryClient(QObject *parent) :
     QObject(parent)
@@ -142,7 +142,8 @@ void WSDiscoveryClient::receivedMessage(const KDSoapMessage &replyMessage, const
         WSDiscovery200504::TNS__ProbeMatchesType probeMatches;
         probeMatches.deserialize(replyMessage);
 
-        for(const WSDiscovery200504::TNS__ProbeMatchType& probeMatch : probeMatches.probeMatch()) {
+        const QList<WSDiscovery200504::TNS__ProbeMatchType>& probeMatchList = probeMatches.probeMatch();
+        for(const WSDiscovery200504::TNS__ProbeMatchType& probeMatch : probeMatchList) {
             const QString& endpointReference = probeMatch.endpointReference().address();
             QSharedPointer<WSDiscoveryTargetService> service = m_targetServiceMap.value(endpointReference);
             if(service.isNull()) {

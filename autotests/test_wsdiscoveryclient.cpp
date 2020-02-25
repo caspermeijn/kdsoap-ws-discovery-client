@@ -29,32 +29,36 @@ Q_DECLARE_METATYPE(QSharedPointer<WSDiscoveryTargetService>)
 class testWSDiscoveryClient: public QObject
 {
     Q_OBJECT
+public:
+    explicit testWSDiscoveryClient(QObject* parent = nullptr) :
+        QObject(parent) {;}
+        
 private slots:
-    void testSendProbe();
-    void testSendResolve();
-    void testReceiveProbeMatch();
-    void testReceiveResolveMatch();
+    static void testSendProbe();
+    static void testSendResolve();
+    static void testReceiveProbeMatch();
+    static void testReceiveResolveMatch();
     
 private:
-    QByteArray zeroOutUuid(const QByteArray& original);
-    QByteArray expectedSendProbeData();
-    QByteArray expectedSendResolveData();
-    QByteArray toBeSendProbeMatchData();
-    QByteArray toBeSendResolveMatchData();
-    QByteArray formatXml(const QByteArray& original);
+    static QByteArray zeroOutUuid(const QByteArray& original);
+    static QByteArray expectedSendProbeData();
+    static QByteArray expectedSendResolveData();
+    static QByteArray toBeSendProbeMatchData();
+    static QByteArray toBeSendResolveMatchData();
+    static QByteArray formatXml(const QByteArray& original);
 };
 
 void testWSDiscoveryClient::testSendProbe() 
 {
     QUdpSocket testSocket;
     QVERIFY(testSocket.bind(QHostAddress::Any, 3702, QAbstractSocket::ShareAddress));
-    QVERIFY(testSocket.joinMulticastGroup(QHostAddress("FF02::C")));
+    QVERIFY(testSocket.joinMulticastGroup(QHostAddress(QStringLiteral("FF02::C"))));
 
-    KDQName type("tdn:NetworkVideoTransmitter");
-    type.setNameSpace("http://www.onvif.org/ver10/network/wsdl");
+    KDQName type(QStringLiteral("tdn:NetworkVideoTransmitter"));
+    type.setNameSpace(QStringLiteral("http://www.onvif.org/ver10/network/wsdl"));
     auto typeList = QList<KDQName>() << type;
     
-    auto scopeList = QList<QUrl>() << QUrl("onvif://www.onvif.org/Profile/Streaming");
+    auto scopeList = QList<QUrl>() << QUrl(QStringLiteral("onvif://www.onvif.org/Profile/Streaming"));
     
     WSDiscoveryClient discoveryClient;
     discoveryClient.start();
@@ -95,11 +99,11 @@ void testWSDiscoveryClient::testSendResolve()
 {
     QUdpSocket testSocket;
     QVERIFY(testSocket.bind(QHostAddress::Any, 3702, QAbstractSocket::ShareAddress));
-    QVERIFY(testSocket.joinMulticastGroup(QHostAddress("FF02::C")));
+    QVERIFY(testSocket.joinMulticastGroup(QHostAddress(QStringLiteral("FF02::C"))));
 
     WSDiscoveryClient discoveryClient;
     discoveryClient.start();
-    discoveryClient.sendResolve("A_Unique_Reference");
+    discoveryClient.sendResolve(QStringLiteral("A_Unique_Reference"));
 
     QVERIFY(testSocket.hasPendingDatagrams());
     auto datagram = testSocket.receiveDatagram();
@@ -144,8 +148,8 @@ void testWSDiscoveryClient::testReceiveProbeMatch()
     
     QUdpSocket testSocket;
     QVERIFY(testSocket.bind(QHostAddress::Any, 3702, QAbstractSocket::ShareAddress));
-    QVERIFY(testSocket.joinMulticastGroup(QHostAddress("FF02::C")));
-    testSocket.writeDatagram(toBeSendProbeMatchData(), QHostAddress("FF02::C"), 3702);
+    QVERIFY(testSocket.joinMulticastGroup(QHostAddress(QStringLiteral("FF02::C"))));
+    testSocket.writeDatagram(toBeSendProbeMatchData(), QHostAddress(QStringLiteral("FF02::C")), 3702);
     
     QVERIFY(spy.wait(1000));
     
@@ -156,11 +160,11 @@ void testWSDiscoveryClient::testReceiveProbeMatch()
 
     QCOMPARE(probeMatchService->endpointReference(), "Incomming_unique_reference");
     QCOMPARE(probeMatchService->scopeList().size(), 1);
-    QCOMPARE(probeMatchService->scopeList().at(0), QUrl("ldap:///ou=engineering,o=examplecom,c=us"));
+    QCOMPARE(probeMatchService->scopeList().at(0), QUrl(QStringLiteral("ldap:///ou=engineering,o=examplecom,c=us")));
     QCOMPARE(probeMatchService->typeList().size(), 1);
-    QCOMPARE(probeMatchService->typeList().at(0), KDQName("http://printer.example.org/2003/imaging", "PrintBasic"));
+    QCOMPARE(probeMatchService->typeList().at(0), KDQName(QStringLiteral("http://printer.example.org/2003/imaging"), QStringLiteral("PrintBasic")));
     QCOMPARE(probeMatchService->xAddrList().size(), 1);
-    QCOMPARE(probeMatchService->xAddrList().at(0), QUrl("http://prn-example/PRN42/b42-1668-a"));
+    QCOMPARE(probeMatchService->xAddrList().at(0), QUrl(QStringLiteral("http://prn-example/PRN42/b42-1668-a")));
     QVERIFY(probeMatchService->lastSeen().msecsTo(QDateTime::currentDateTime()) < 500);
 }
 
@@ -207,8 +211,8 @@ void testWSDiscoveryClient::testReceiveResolveMatch()
     
     QUdpSocket testSocket;
     QVERIFY(testSocket.bind(QHostAddress::Any, 3702, QAbstractSocket::ShareAddress));
-    QVERIFY(testSocket.joinMulticastGroup(QHostAddress("FF02::C")));
-    testSocket.writeDatagram(toBeSendResolveMatchData(), QHostAddress("FF02::C"), 3702);
+    QVERIFY(testSocket.joinMulticastGroup(QHostAddress(QStringLiteral("FF02::C"))));
+    testSocket.writeDatagram(toBeSendResolveMatchData(), QHostAddress(QStringLiteral("FF02::C")), 3702);
     
     QVERIFY(spy.wait(1000));
     
@@ -219,11 +223,11 @@ void testWSDiscoveryClient::testReceiveResolveMatch()
 
     QCOMPARE(probeMatchService->endpointReference(), "Incomming_resolve_reference");
     QCOMPARE(probeMatchService->scopeList().size(), 1);
-    QCOMPARE(probeMatchService->scopeList().at(0), QUrl("ldap:///ou=floor1,ou=b42,ou=anytown,o=examplecom,c=us"));
+    QCOMPARE(probeMatchService->scopeList().at(0), QUrl(QStringLiteral("ldap:///ou=floor1,ou=b42,ou=anytown,o=examplecom,c=us")));
     QCOMPARE(probeMatchService->typeList().size(), 1);
-    QCOMPARE(probeMatchService->typeList().at(0), KDQName("http://printer.example.org/2003/imaging", "PrintAdvanced"));
+    QCOMPARE(probeMatchService->typeList().at(0), KDQName(QStringLiteral("http://printer.example.org/2003/imaging"), QStringLiteral("PrintAdvanced")));
     QCOMPARE(probeMatchService->xAddrList().size(), 1);
-    QCOMPARE(probeMatchService->xAddrList().at(0), QUrl("http://printer.local:8080"));
+    QCOMPARE(probeMatchService->xAddrList().at(0), QUrl(QStringLiteral("http://printer.local:8080")));
     QVERIFY(probeMatchService->lastSeen().msecsTo(QDateTime::currentDateTime()) < 500);
 }
 
@@ -281,7 +285,7 @@ QByteArray testWSDiscoveryClient::formatXml(const QByteArray& original)
 QByteArray testWSDiscoveryClient::zeroOutUuid(const QByteArray& original)
 {
     QString originalString = original;
-    originalString.replace(QRegExp("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"), "00000000-0000-0000-0000-000000000000");
+    originalString.replace(QRegExp("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"), QStringLiteral("00000000-0000-0000-0000-000000000000"));
     return originalString.toLatin1();
 }
 

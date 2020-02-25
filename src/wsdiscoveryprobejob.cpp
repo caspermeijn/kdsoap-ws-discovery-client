@@ -91,10 +91,10 @@ void WSDiscoveryProbeJob::timeout()
 void WSDiscoveryProbeJob::probeMatchReceived(const QSharedPointer<WSDiscoveryTargetService> &probeMatchService)
 {
     bool isMatch = true;
-    for(const KDQName& type : m_typeList) {
+    for(const KDQName& type : qAsConst(m_typeList)) {
         isMatch = probeMatchService->isMatchingType(type) && isMatch;
     }
-    for(const QUrl& scope : m_scopeList) {
+    for(const QUrl& scope : qAsConst(m_scopeList)) {
         isMatch = probeMatchService->isMatchingScope(scope) && isMatch;
     }
     if(isMatch) {

@@ -13,7 +13,7 @@ However the library is designed to be useful as a generic WS-Discovery client.
 
 ## Current state
 
-The library is not yet ready for production. There are some API changes planned and it needs the master branch of [KDSoap](https://github.com/KDAB/KDSoap). The [WS-Discovery 2005-04](http://schemas.xmlsoap.org/ws/2005/04/discovery/) standard is specification, but only the Probe and Resolve messages are available.
+The library is not yet ready for production. There are some API changes planned and it needs [KDSoap](https://github.com/KDAB/KDSoap) 1.9.0. The [WS-Discovery 2005-04](http://schemas.xmlsoap.org/ws/2005/04/discovery/) standard is specification, but only the Probe and Resolve messages are available.
 
 ## Contributions
 
