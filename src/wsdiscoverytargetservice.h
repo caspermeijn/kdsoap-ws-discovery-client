@@ -22,10 +22,14 @@
 #include <QDateTime>
 #include <QUrl>
 
+class WSDiscoveryTargetServiceData;
+
 class WSDISCOVERYCLIENT_EXPORT WSDiscoveryTargetService
 {
 public:
     explicit WSDiscoveryTargetService(const QString &endpointReference);
+    WSDiscoveryTargetService(const WSDiscoveryTargetService &other);
+    ~WSDiscoveryTargetService();
 
     QString endpointReference() const;
     QList<KDQName> typeList() const;
@@ -42,11 +46,7 @@ public:
     bool isMatchingScope(const QUrl &matchingScope) const;
 
 private:
-    QString m_endpointReference;
-    QList<KDQName> m_typeList;
-    QList<QUrl> m_scopeList;
-    QList<QUrl> m_xAddrList;
-    QDateTime m_lastSeen;
+    QSharedDataPointer<WSDiscoveryTargetServiceData> d;
 };
 
 #endif // WSDISCOVERYTARGETSERVICE_H

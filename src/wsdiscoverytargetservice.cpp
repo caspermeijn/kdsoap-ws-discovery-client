@@ -16,19 +16,43 @@
  */
 #include "wsdiscoverytargetservice.h"
 
-WSDiscoveryTargetService::WSDiscoveryTargetService(const QString &endpointReference) :
-    m_endpointReference(endpointReference)
+class WSDiscoveryTargetServiceData : public QSharedData
 {
+  public:
+    WSDiscoveryTargetServiceData() { }
+    WSDiscoveryTargetServiceData(const WSDiscoveryTargetServiceData &other)
+        : QSharedData(other), 
+        endpointReference(other.endpointReference), 
+        typeList(other.typeList), 
+        scopeList(other.scopeList), 
+        xAddrList(other.xAddrList), 
+        lastSeen(other.lastSeen) { }
+    ~WSDiscoveryTargetServiceData() { }
+
+    QString endpointReference;
+    QList<KDQName> typeList;
+    QList<QUrl> scopeList;
+    QList<QUrl> xAddrList;
+    QDateTime lastSeen;
+};
+
+WSDiscoveryTargetService::WSDiscoveryTargetService(const QString &endpointReference)
+{
+    d = new WSDiscoveryTargetServiceData();
+    d->endpointReference = endpointReference;
 }
+
+WSDiscoveryTargetService::WSDiscoveryTargetService(const WSDiscoveryTargetService &other) = default;
+WSDiscoveryTargetService::~WSDiscoveryTargetService() = default;
 
 QDateTime WSDiscoveryTargetService::lastSeen() const
 {
-    return m_lastSeen;
+    return d->lastSeen;
 }
 
 void WSDiscoveryTargetService::setLastSeen(const QDateTime &lastSeen)
 {
-    m_lastSeen = lastSeen;
+    d->lastSeen = lastSeen;
 }
 
 void WSDiscoveryTargetService::updateLastSeen()
@@ -38,7 +62,7 @@ void WSDiscoveryTargetService::updateLastSeen()
 
 bool WSDiscoveryTargetService::isMatchingType(const KDQName &matchingType) const
 {
-    for(const KDQName &type : m_typeList) {
+    for(const KDQName &type : d->typeList) {
         if(matchingType.nameSpace() == type.nameSpace() &&
                 matchingType.localName() == type.localName()) {
             return true;
@@ -49,7 +73,7 @@ bool WSDiscoveryTargetService::isMatchingType(const KDQName &matchingType) const
 
 bool WSDiscoveryTargetService::isMatchingScope(const QUrl &matchingScope) const
 {
-    for(const QUrl &scope : m_scopeList) {
+    for(const QUrl &scope : d->scopeList) {
         if(matchingScope == scope) {
             return true;
         }
@@ -59,35 +83,35 @@ bool WSDiscoveryTargetService::isMatchingScope(const QUrl &matchingScope) const
 
 QList<QUrl> WSDiscoveryTargetService::xAddrList() const
 {
-    return m_xAddrList;
+    return d->xAddrList;
 }
 
 void WSDiscoveryTargetService::setXAddrList(const QList<QUrl> &xAddrList)
 {
-    m_xAddrList = xAddrList;
+    d->xAddrList = xAddrList;
 }
 
 QList<QUrl> WSDiscoveryTargetService::scopeList() const
 {
-    return m_scopeList;
+    return d->scopeList;
 }
 
 void WSDiscoveryTargetService::setScopeList(const QList<QUrl> &scopeList)
 {
-    m_scopeList = scopeList;
+    d->scopeList = scopeList;
 }
 
 QList<KDQName> WSDiscoveryTargetService::typeList() const
 {
-    return m_typeList;
+    return d->typeList;
 }
 
 void WSDiscoveryTargetService::setTypeList(const QList<KDQName> &typeList)
 {
-    m_typeList = typeList;
+    d->typeList = typeList;
 }
 
 QString WSDiscoveryTargetService::endpointReference() const
 {
-    return m_endpointReference;
+    return d->endpointReference;
 }
