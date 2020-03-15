@@ -25,6 +25,7 @@ if(DOXYGEN_FOUND)
         "src/wsdiscoveryclient.h"
         "src/wsdiscoveryprobejob.h"
         "src/wsdiscoverytargetservice.h"
+        "src/wsdiscoveryserviceaggrigator.h"
         ALL
         USE_STAMP_FILE
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
