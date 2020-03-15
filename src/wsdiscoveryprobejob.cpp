@@ -88,14 +88,14 @@ void WSDiscoveryProbeJob::timeout()
     m_client->sendProbe(m_typeList, m_scopeList);
 }
 
-void WSDiscoveryProbeJob::probeMatchReceived(const QSharedPointer<WSDiscoveryTargetService> &probeMatchService)
+void WSDiscoveryProbeJob::probeMatchReceived(const WSDiscoveryTargetService &probeMatchService)
 {
     bool isMatch = true;
     for(const KDQName& type : qAsConst(m_typeList)) {
-        isMatch = probeMatchService->isMatchingType(type) && isMatch;
+        isMatch = probeMatchService.isMatchingType(type) && isMatch;
     }
     for(const QUrl& scope : qAsConst(m_scopeList)) {
-        isMatch = probeMatchService->isMatchingScope(scope) && isMatch;
+        isMatch = probeMatchService.isMatchingScope(scope) && isMatch;
     }
     if(isMatch) {
         emit matchReceived(probeMatchService);

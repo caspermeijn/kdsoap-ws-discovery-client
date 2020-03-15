@@ -54,16 +54,14 @@ signals:
      * with multiple matches, then multiple signals are emitted. 
      * \param probeMatchService The service as described in the match
      */
-    //TODO: Make parameter not shared
-    void probeMatchReceived(const QSharedPointer<WSDiscoveryTargetService>& probeMatchService);
+    void probeMatchReceived(const WSDiscoveryTargetService& probeMatchService);
     
     /*!
      * Emitted when a WS-Discovery resolve match message is received. 
      * \param probeMatchService The service as described in the match
      */
     //TODO: Rename parameter
-    //TODO: Make parameter not shared
-    void resolveMatchReceived(const QSharedPointer<WSDiscoveryTargetService>& probeMatchService);
+    void resolveMatchReceived(const WSDiscoveryTargetService& probeMatchService);
 
 public slots:
     /*!
@@ -75,7 +73,7 @@ public slots:
     
     /*!
      * Send a WS-Discovery probe message. This will cause all devices in the network
-     * that match to \typeList and \scopeList to send a probeMatch back.
+     * that match to \p typeList and \p scopeList to send a probeMatch back.
      * \param  typeList List of types that a device should match
      * \param  scopeList List of scoped that a device should match
      */
@@ -94,7 +92,6 @@ private slots:
 
 private:
     KDSoapUdpClient * m_soapUdpClient;
-    QHash<QString, QSharedPointer<WSDiscoveryTargetService>> m_targetServiceMap;
 };
 
 #endif // WSDISCOVERYCLIENT_H
