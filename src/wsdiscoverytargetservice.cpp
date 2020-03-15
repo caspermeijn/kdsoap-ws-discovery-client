@@ -36,6 +36,11 @@ class WSDiscoveryTargetServiceData : public QSharedData
     QDateTime lastSeen;
 };
 
+WSDiscoveryTargetService::WSDiscoveryTargetService()
+{
+    d = new WSDiscoveryTargetServiceData();
+}
+
 WSDiscoveryTargetService::WSDiscoveryTargetService(const QString &endpointReference)
 {
     d = new WSDiscoveryTargetServiceData();
@@ -115,3 +120,9 @@ QString WSDiscoveryTargetService::endpointReference() const
 {
     return d->endpointReference;
 }
+
+void WSDiscoveryTargetService::setEndpointReference(const QString& endpointReference)
+{
+    d->endpointReference = endpointReference;
+}
+

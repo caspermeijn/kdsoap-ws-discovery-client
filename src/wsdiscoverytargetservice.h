@@ -27,10 +27,12 @@ class WSDiscoveryTargetServiceData;
 class WSDISCOVERYCLIENT_EXPORT WSDiscoveryTargetService
 {
 public:
+    explicit WSDiscoveryTargetService();
     explicit WSDiscoveryTargetService(const QString &endpointReference);
     WSDiscoveryTargetService(const WSDiscoveryTargetService &other);
     ~WSDiscoveryTargetService();
 
+    void setEndpointReference(const QString &endpointReference);
     QString endpointReference() const;
     QList<KDQName> typeList() const;
     void setTypeList(const QList<KDQName> &typeList);
