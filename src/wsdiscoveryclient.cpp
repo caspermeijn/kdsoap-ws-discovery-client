@@ -128,15 +128,11 @@ void WSDiscoveryClient::receivedMessage(const KDSoapMessage &replyMessage, const
 
         auto resolveMatch = resolveMatches.resolveMatch();
         const QString& endpointReference = resolveMatch.endpointReference().address();
-        QSharedPointer<WSDiscoveryTargetService> service = m_targetServiceMap.value(endpointReference);
-        if(service.isNull()) {
-            service = QSharedPointer<WSDiscoveryTargetService>::create(endpointReference);
-            m_targetServiceMap.insert(endpointReference, service);
-        }
-        service->setTypeList(resolveMatch.types().entries());
-        service->setScopeList(QUrl::fromStringList(resolveMatch.scopes().value().entries()));
-        service->setXAddrList(QUrl::fromStringList(resolveMatch.xAddrs().entries()));
-        service->updateLastSeen();
+        auto service = WSDiscoveryTargetService(endpointReference);
+        service.setTypeList(resolveMatch.types().entries());
+        service.setScopeList(QUrl::fromStringList(resolveMatch.scopes().value().entries()));
+        service.setXAddrList(QUrl::fromStringList(resolveMatch.xAddrs().entries()));
+        service.updateLastSeen();
         emit resolveMatchReceived(service);
     } else if(replyMessage.messageAddressingProperties().action() == QStringLiteral("http://schemas.xmlsoap.org/ws/2005/04/discovery/ProbeMatches")) {
         WSDiscovery200504::TNS__ProbeMatchesType probeMatches;
@@ -145,15 +141,11 @@ void WSDiscoveryClient::receivedMessage(const KDSoapMessage &replyMessage, const
         const QList<WSDiscovery200504::TNS__ProbeMatchType>& probeMatchList = probeMatches.probeMatch();
         for(const WSDiscovery200504::TNS__ProbeMatchType& probeMatch : probeMatchList) {
             const QString& endpointReference = probeMatch.endpointReference().address();
-            QSharedPointer<WSDiscoveryTargetService> service = m_targetServiceMap.value(endpointReference);
-            if(service.isNull()) {
-                service = QSharedPointer<WSDiscoveryTargetService>::create(endpointReference);
-                m_targetServiceMap.insert(endpointReference, service);
-            }
-            service->setTypeList(probeMatch.types().entries());
-            service->setScopeList(QUrl::fromStringList(probeMatch.scopes().value().entries()));
-            service->setXAddrList(QUrl::fromStringList(probeMatch.xAddrs().entries()));
-            service->updateLastSeen();
+            auto service = WSDiscoveryTargetService(endpointReference);
+            service.setTypeList(probeMatch.types().entries());
+            service.setScopeList(QUrl::fromStringList(probeMatch.scopes().value().entries()));
+            service.setXAddrList(QUrl::fromStringList(probeMatch.xAddrs().entries()));
+            service.updateLastSeen();
             emit probeMatchReceived(service);
         }
     } else {

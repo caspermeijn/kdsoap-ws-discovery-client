@@ -33,7 +33,6 @@ class WSDiscoveryTargetService;
  * the filter will be reported. After starting it will probe the network and 
  * report any matches.
  */
-//TODO: Rename class
 class WSDISCOVERYCLIENT_EXPORT WSDiscoveryProbeJob : public QObject
 {
     Q_OBJECT
@@ -85,7 +84,7 @@ signals:
      * Emitted when a match is received
      * \param matchedService The service as described in the match
      */
-    void matchReceived(const QSharedPointer<WSDiscoveryTargetService>& matchedService);
+    void matchReceived(const WSDiscoveryTargetService& matchedService);
 
 public slots:
     /*!
@@ -100,7 +99,7 @@ public slots:
 //TODO: Hide private interface
 private slots:
     void timeout();
-    void probeMatchReceived(const QSharedPointer<WSDiscoveryTargetService>& probeMatchService);
+    void probeMatchReceived(const WSDiscoveryTargetService& probeMatchService);
 
 private:
     WSDiscoveryClient * m_client;

@@ -24,7 +24,7 @@
 #include "wsdiscoveryclient.h"
 #include "wsdiscoverytargetservice.h"
 
-Q_DECLARE_METATYPE(QSharedPointer<WSDiscoveryTargetService>)
+Q_DECLARE_METATYPE(WSDiscoveryTargetService)
 
 class testWSDiscoveryClient: public QObject
 {
@@ -142,7 +142,7 @@ void testWSDiscoveryClient::testReceiveProbeMatch()
     WSDiscoveryClient discoveryClient;
     discoveryClient.start();
     
-    qRegisterMetaType<QSharedPointer<WSDiscoveryTargetService> >();
+    qRegisterMetaType<WSDiscoveryTargetService>();
     QSignalSpy spy(&discoveryClient, &WSDiscoveryClient::probeMatchReceived);
     QVERIFY(spy.isValid());
     
@@ -156,16 +156,16 @@ void testWSDiscoveryClient::testReceiveProbeMatch()
     QCOMPARE(spy.count(), 1); // make sure the signal was emitted exactly one time
     QList<QVariant> arguments = spy.takeFirst(); // take the first signal
     
-    const QSharedPointer<WSDiscoveryTargetService>& probeMatchService = qvariant_cast<QSharedPointer<WSDiscoveryTargetService> >(arguments.at(0));
+    const WSDiscoveryTargetService& probeMatchService = qvariant_cast<WSDiscoveryTargetService>(arguments.at(0));
 
-    QCOMPARE(probeMatchService->endpointReference(), "Incomming_unique_reference");
-    QCOMPARE(probeMatchService->scopeList().size(), 1);
-    QCOMPARE(probeMatchService->scopeList().at(0), QUrl(QStringLiteral("ldap:///ou=engineering,o=examplecom,c=us")));
-    QCOMPARE(probeMatchService->typeList().size(), 1);
-    QCOMPARE(probeMatchService->typeList().at(0), KDQName(QStringLiteral("http://printer.example.org/2003/imaging"), QStringLiteral("PrintBasic")));
-    QCOMPARE(probeMatchService->xAddrList().size(), 1);
-    QCOMPARE(probeMatchService->xAddrList().at(0), QUrl(QStringLiteral("http://prn-example/PRN42/b42-1668-a")));
-    QVERIFY(probeMatchService->lastSeen().msecsTo(QDateTime::currentDateTime()) < 500);
+    QCOMPARE(probeMatchService.endpointReference(), "Incomming_unique_reference");
+    QCOMPARE(probeMatchService.scopeList().size(), 1);
+    QCOMPARE(probeMatchService.scopeList().at(0), QUrl(QStringLiteral("ldap:///ou=engineering,o=examplecom,c=us")));
+    QCOMPARE(probeMatchService.typeList().size(), 1);
+    QCOMPARE(probeMatchService.typeList().at(0), KDQName(QStringLiteral("http://printer.example.org/2003/imaging"), QStringLiteral("PrintBasic")));
+    QCOMPARE(probeMatchService.xAddrList().size(), 1);
+    QCOMPARE(probeMatchService.xAddrList().at(0), QUrl(QStringLiteral("http://prn-example/PRN42/b42-1668-a")));
+    QVERIFY(probeMatchService.lastSeen().msecsTo(QDateTime::currentDateTime()) < 500);
 }
 
 QByteArray testWSDiscoveryClient::toBeSendProbeMatchData()
@@ -205,7 +205,7 @@ void testWSDiscoveryClient::testReceiveResolveMatch()
     WSDiscoveryClient discoveryClient;
     discoveryClient.start();
     
-    qRegisterMetaType<QSharedPointer<WSDiscoveryTargetService> >();
+    qRegisterMetaType<WSDiscoveryTargetService>();
     QSignalSpy spy(&discoveryClient, &WSDiscoveryClient::resolveMatchReceived);
     QVERIFY(spy.isValid());
     
@@ -219,16 +219,16 @@ void testWSDiscoveryClient::testReceiveResolveMatch()
     QCOMPARE(spy.count(), 1); // make sure the signal was emitted exactly one time
     QList<QVariant> arguments = spy.takeFirst(); // take the first signal
     
-    const QSharedPointer<WSDiscoveryTargetService>& probeMatchService = qvariant_cast<QSharedPointer<WSDiscoveryTargetService> >(arguments.at(0));
+    const WSDiscoveryTargetService& probeMatchService = qvariant_cast<WSDiscoveryTargetService>(arguments.at(0));
 
-    QCOMPARE(probeMatchService->endpointReference(), "Incomming_resolve_reference");
-    QCOMPARE(probeMatchService->scopeList().size(), 1);
-    QCOMPARE(probeMatchService->scopeList().at(0), QUrl(QStringLiteral("ldap:///ou=floor1,ou=b42,ou=anytown,o=examplecom,c=us")));
-    QCOMPARE(probeMatchService->typeList().size(), 1);
-    QCOMPARE(probeMatchService->typeList().at(0), KDQName(QStringLiteral("http://printer.example.org/2003/imaging"), QStringLiteral("PrintAdvanced")));
-    QCOMPARE(probeMatchService->xAddrList().size(), 1);
-    QCOMPARE(probeMatchService->xAddrList().at(0), QUrl(QStringLiteral("http://printer.local:8080")));
-    QVERIFY(probeMatchService->lastSeen().msecsTo(QDateTime::currentDateTime()) < 500);
+    QCOMPARE(probeMatchService.endpointReference(), "Incomming_resolve_reference");
+    QCOMPARE(probeMatchService.scopeList().size(), 1);
+    QCOMPARE(probeMatchService.scopeList().at(0), QUrl(QStringLiteral("ldap:///ou=floor1,ou=b42,ou=anytown,o=examplecom,c=us")));
+    QCOMPARE(probeMatchService.typeList().size(), 1);
+    QCOMPARE(probeMatchService.typeList().at(0), KDQName(QStringLiteral("http://printer.example.org/2003/imaging"), QStringLiteral("PrintAdvanced")));
+    QCOMPARE(probeMatchService.xAddrList().size(), 1);
+    QCOMPARE(probeMatchService.xAddrList().at(0), QUrl(QStringLiteral("http://printer.local:8080")));
+    QVERIFY(probeMatchService.lastSeen().msecsTo(QDateTime::currentDateTime()) < 500);
 }
 
 QByteArray testWSDiscoveryClient::toBeSendResolveMatchData()
