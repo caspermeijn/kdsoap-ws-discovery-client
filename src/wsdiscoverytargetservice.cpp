@@ -19,16 +19,6 @@
 class WSDiscoveryTargetServiceData : public QSharedData
 {
   public:
-    WSDiscoveryTargetServiceData() { }
-    WSDiscoveryTargetServiceData(const WSDiscoveryTargetServiceData &other)
-        : QSharedData(other), 
-        endpointReference(other.endpointReference), 
-        typeList(other.typeList), 
-        scopeList(other.scopeList), 
-        xAddrList(other.xAddrList), 
-        lastSeen(other.lastSeen) { }
-    ~WSDiscoveryTargetServiceData() { }
-
     QString endpointReference;
     QList<KDQName> typeList;
     QList<QUrl> scopeList;

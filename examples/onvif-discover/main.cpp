@@ -26,8 +26,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qDebug() << "Starting ONVIF discovery for 5 seconds";
     QTimer::singleShot(5000, &app, &QCoreApplication::quit);
 
-    OnvifDiscover * onvifDiscover = new OnvifDiscover(&app);
+    auto onvifDiscover = new OnvifDiscover(&app);
     onvifDiscover->start();
 
-    return app.exec();
+    return QCoreApplication::exec();
 }
