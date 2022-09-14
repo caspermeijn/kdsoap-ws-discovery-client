@@ -22,7 +22,7 @@ include(FeatureSummary)
 find_package(ECM 5.54.0  NO_MODULE)
 set_package_properties(ECM PROPERTIES TYPE REQUIRED DESCRIPTION "Extra CMake Modules." URL "https://projects.kde.org/projects/kdesupport/extra-cmake-modules")
 feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
-set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
 include(CTest)
 include(KDEInstallDirs)
@@ -63,7 +63,7 @@ ecm_setup_version(PROJECT
 
 add_subdirectory(src)
 add_subdirectory(examples)
-add_subdirectory(docs)  
+add_subdirectory(docs)
 if(BUILD_TESTING)
     add_subdirectory(autotests)
 endif()
